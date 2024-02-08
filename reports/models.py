@@ -11,13 +11,14 @@ class Report(models.Model):
     parameters字段可以用来存储生成报告所需的特定参数，例如报告的时间范围、特定的资产ID等，以JSON格式存储以保持灵活性。
     """
     REPORT_TYPE_CHOICES = (
-        ('asset_summary', 'Asset Summary'),
-        ('maintenance_history', 'Maintenance History'),
-        ('inventory_status', 'Inventory Status'),
-        ('disposal_record', 'Disposal Record'),
+        ('asset_summary', '资产摘要'),
+        ('maintenance_history', '维护记录'),
+        ('inventory_status', '库存状态'),
+        ('disposal_record', '处置记录'),
         # 根据需要添加更多报告类型
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=100,verbose_name="标题",null=True)
     report_type = models.CharField(max_length=50, choices=REPORT_TYPE_CHOICES, verbose_name='报告类型')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='生成日期')
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name='生成者')
