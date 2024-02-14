@@ -26,7 +26,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "simpleui",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -57,7 +56,7 @@ ROOT_URLCONF = "CFAMS.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR.parent, './Template')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -101,11 +100,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # BASE_DIR 是项目的绝对地址
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
