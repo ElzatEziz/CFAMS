@@ -1,35 +1,49 @@
 from django.db import models
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager
 
+class UserManager(BaseUserManager):
+    def create_user(self, email, username, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class UserProfile(models.Model):
+    def create_superuser(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(email, username, password, **extra_fields)
+    
+class User(AbstractBaseUser):
     ROLE_CHOICES = (
         ('admin', '系统管理员'),
         ('manager', '资产管理人员'),
         # 可以根据需要添加更多角色
     )
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile', verbose_name='用户')
+    username=models.CharField(max_length=20,verbose_name='用户名',unique=True)
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='manager', verbose_name='角色')
     phone = models.CharField(max_length=20, blank=True, verbose_name='电话号码')
     department = models.CharField(max_length=100, blank=True, verbose_name='部门')
+    email = models.EmailField(blank=True,verbose_name="电子邮件")
+    USERNAME_FIELD="username"
+    REQUIRED_FIELDS = ['email']
+
+    objects = UserManager()
 
     def __str__(self):
-        return self.user.username
+        return self.username
 
     class Meta:
-        verbose_name = '用户资料'
-        verbose_name_plural = '用户资料'
+        db_table="tb_users"
+        verbose_name = '用户'
+        verbose_name_plural = verbose_name
 
-
-# Django信号，用于在创建新的User实例时自动创建UserProfile实例
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        UserProfile.objects.create(user=instance)
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()

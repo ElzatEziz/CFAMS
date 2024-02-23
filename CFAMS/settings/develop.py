@@ -12,6 +12,10 @@ DATABASES = {
         "PORT": "3306",
     }
 }
+
+ALLOWED_HOSTS = ['*']
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
@@ -20,6 +24,8 @@ STATIC_ROOT = "static"
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+AUTH_USER_MODEL='users.User'
 
 # # SimpleUi配置
 # SIMPLEUI_HOME_TITLE = '校园固定资产管理系统'
@@ -111,6 +117,6 @@ STATICFILES_DIR = [
 #     ]
 # }
 
-# 隐藏首页的快捷操作和最近动作
-SIMPLEUI_HOME_QUICK = True
-SIMPLEUI_HOME_ACTION = True
+# # 隐藏首页的快捷操作和最近动作
+# SIMPLEUI_HOME_QUICK = True
+# SIMPLEUI_HOME_ACTION = True

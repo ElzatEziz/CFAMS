@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
-import uuid
-
+from users.models import User
 
 class Report(models.Model):
     """
@@ -17,7 +15,6 @@ class Report(models.Model):
         ('disposal_record', '处置记录'),
         # 根据需要添加更多报告类型
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=100,verbose_name="标题",null=True)
     report_type = models.CharField(max_length=50, choices=REPORT_TYPE_CHOICES, verbose_name='报告类型')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='生成日期')
@@ -28,5 +25,6 @@ class Report(models.Model):
         return f"{self.get_report_type_display()} - {self.created_at.strftime('%Y-%m-%d')}"
 
     class Meta:
+        db_table="tb_reports"
         verbose_name = '报告'
         verbose_name_plural = '报告'

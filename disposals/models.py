@@ -1,6 +1,5 @@
 from django.db import models
 from assets.models import Asset  # 假设资产模型位于assets应用中
-import uuid
 
 
 class DisposalRecord(models.Model):
@@ -15,7 +14,6 @@ class DisposalRecord(models.Model):
         ('scrap', '废弃'),
         # 根据需要添加更多处置方式
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE, verbose_name='处置资产')
     disposal_date = models.DateField(verbose_name='处置日期')
     disposal_method = models.CharField(max_length=50, choices=DISPOSAL_METHOD_CHOICES, verbose_name='处置方式')
@@ -26,5 +24,6 @@ class DisposalRecord(models.Model):
         return f"{self.asset.name} - {self.disposal_method} - {self.disposal_date}"
 
     class Meta:
+        db_table="tb_disposals"
         verbose_name = '资产处置记录'
-        verbose_name_plural = '资产处置记录'
+        verbose_name_plural = verbose_name

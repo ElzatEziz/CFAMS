@@ -1,4 +1,3 @@
-import uuid
 
 from django.db import models
 
@@ -19,7 +18,6 @@ class Asset(models.Model):
         ('disposed', '处置中'),
         # 可根据需要添加更多状态选项
     )
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255, verbose_name='资产名称')
     asset_type = models.CharField(max_length=50, choices=TYPE_CHOICES, verbose_name='资产类型')
     purchase_date = models.DateField(verbose_name='购买日期')
@@ -32,5 +30,6 @@ class Asset(models.Model):
         return self.name
 
     class Meta:
+        db_table="tb_assets"
         verbose_name = '资产'
-        verbose_name_plural = '资产'
+        verbose_name_plural = verbose_name
