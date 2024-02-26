@@ -8,10 +8,13 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework.permissions import AllowAny
+from rest_framework.views import APIView
+# 获取所有用户
 class UserView(GenericViewSet,ListModelMixin,RetrieveModelMixin,CreateModelMixin):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     
+# 注册新用户
 class RegisterView(GenericViewSet,CreateModelMixin,GenericAPIView):
     permission_classes = [AllowAny]
     serializer_class = UserSerializer
@@ -31,7 +34,7 @@ class RegisterView(GenericViewSet,CreateModelMixin,GenericAPIView):
         serializer = self.get_serializer(user)
         return Response(serializer.data,status=status.HTTP_201_CREATED)
 
-
+# 登录用户并返回Token
 class LoginView(TokenObtainPairView):
     # 指定serializer_class如果你需要自定义TokenObtainPairSerializer
     # serializer_class = MyCustomTokenObtainPairSerializer
@@ -46,3 +49,24 @@ class LoginView(TokenObtainPairView):
         else:
             # 如果用户名或密码验证失败，则返回错误信息
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+# 获取当前登录用户信息
+class CurrentUserView(ListModelMixin,GenericViewSet):
+    serializer_class = UserSerializer
+
+    def get_queryset(self):
+        """
+        仅返回当前登录用户的查询集。
+        """
+        # self.request.user 是当前通过JWT认证的用户
+        # 我们通过filter返回一个只包含当前用户的查询集
+        return User.objects.filter(id=self.request.user.id)
+
+    def list(self, request, *args, **kwargs):
+        """
+        重写list方法以改变默认行为，确保即使是列表视图也只返回当前用户。
+        """
+        # 这里调用ListModelMixin的list方法，它会使用get_queryset的结果
+        return super().list(request, *args, **kwargs)

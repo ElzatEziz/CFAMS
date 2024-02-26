@@ -34,6 +34,9 @@ class User(AbstractBaseUser):
     phone = models.CharField(max_length=20, blank=True, verbose_name='电话号码')
     department = models.CharField(max_length=100, blank=True, verbose_name='部门')
     email = models.EmailField(blank=True,verbose_name="电子邮件")
+    # 头像
+    avatar = models.ImageField(upload_to='photos/', blank=True, null=True, verbose_name='头像')
+
     USERNAME_FIELD="username"
     REQUIRED_FIELDS = ['email']
 

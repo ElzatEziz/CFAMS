@@ -15,9 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path,re_path
+# from django.contrib import admin
 from assets.views import AssetView
-from users.views import UserView, LoginView, RegisterView
+from users.views import UserView, LoginView, RegisterView,CurrentUserView
+from assets.views import AssetCreateView,AssetDeleteByIdView,AssetUpdateByIdView
+from reports.views import ReportView,ReportCreateView,ReportDeleteByIdView,ReportUpdateByIdView
 from rest_framework import routers
+from disposals.views import DisposalRecordView,DisposalRecordCreateView,DisposalRecordDeleteByIdView,DisposalRecordUpdateByIdView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -25,15 +29,23 @@ from rest_framework_simplejwt.views import (
 router = routers.DefaultRouter()
 router.register('assets',AssetView)
 router.register('users',UserView)
-# router.register('login',LoginView,basename='login')
 router.register('register',RegisterView,basename='register')
+router.register('current_user',CurrentUserView,basename='current_user')
+router.register('assets_create',AssetCreateView,basename='assets_create')
+router.register('reports',ReportView)
+router.register('reports_create',ReportCreateView,basename='reports_create')
+router.register('disposals',DisposalRecordView)
+router.register('disposals_create',DisposalRecordCreateView,basename='disposals_create')
 
 urlpatterns = [
-    # path("assets/",AssetView.as_view({"get":"list","post":"create"})),
-    # re_path("assets/(?P<pk>\d+)",AssetView.as_view({"get":"retrieve","delete":"destroy","put":"update"}))
+    # path('admin/', admin.site.urls),
     path('login/',LoginView.as_view(),name='login'),
-    # path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('assets_delete/<int:id>/', AssetDeleteByIdView.as_view(), name='delete-asset'),
+    path('assets_update/<int:id>/', AssetUpdateByIdView.as_view(), name='update-asset'),
+    path('reports_delete/<int:id>/', ReportDeleteByIdView.as_view(), name='delete-report'),
+    path('reports_update/<int:id>/', ReportUpdateByIdView.as_view(), name='update-report'),
+    path('disposals_delete/<int:id>/', DisposalRecordDeleteByIdView.as_view(), name='delete-disposal'),
+    path('disposals_update/<int:id>/', DisposalRecordUpdateByIdView.as_view(), name='update-disposal'),
 ]
 
 urlpatterns += router.urls
