@@ -10,7 +10,8 @@ class DisposalRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DisposalRecord
-        fields = '__all__'
+        # 显示资产名称
+        fields = ('id', 'asset', 'asset_name', 'disposal_date', 'disposal_method', 'recipient', 'cost_or_revenue')
         extra_kwargs = {
             'disposal_date': {'label': '处置日期'},
             'recipient': {'label': '接收方'},

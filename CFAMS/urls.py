@@ -18,7 +18,7 @@ from django.urls import path,re_path
 # from django.contrib import admin
 from assets.views import AssetView
 from users.views import UserView, LoginView, RegisterView,CurrentUserView
-from assets.views import AssetCreateView,AssetDeleteByIdView,AssetUpdateByIdView
+from assets.views import AssetCreateView,AssetDeleteByIdView,AssetUpdateByIdView,AssetFilterView
 from reports.views import ReportView,ReportCreateView,ReportDeleteByIdView,ReportUpdateByIdView
 from rest_framework import routers
 from disposals.views import DisposalRecordView,DisposalRecordCreateView,DisposalRecordDeleteByIdView,DisposalRecordUpdateByIdView
@@ -32,6 +32,7 @@ router.register('users',UserView)
 router.register('register',RegisterView,basename='register')
 router.register('current_user',CurrentUserView,basename='current_user')
 router.register('assets_create',AssetCreateView,basename='assets_create')
+router.register('assets_filter',AssetFilterView,basename='assets_filter')
 router.register('reports',ReportView)
 router.register('reports_create',ReportCreateView,basename='reports_create')
 router.register('disposals',DisposalRecordView)
@@ -42,6 +43,7 @@ urlpatterns = [
     path('login/',LoginView.as_view(),name='login'),
     path('assets_delete/<int:id>/', AssetDeleteByIdView.as_view(), name='delete-asset'),
     path('assets_update/<int:id>/', AssetUpdateByIdView.as_view(), name='update-asset'),
+    # path('assets_filter/', AssetFilterView.as_view({'get': 'list'}), name='filter-asset'),
     path('reports_delete/<int:id>/', ReportDeleteByIdView.as_view(), name='delete-report'),
     path('reports_update/<int:id>/', ReportUpdateByIdView.as_view(), name='update-report'),
     path('disposals_delete/<int:id>/', DisposalRecordDeleteByIdView.as_view(), name='delete-disposal'),
