@@ -2,8 +2,9 @@ from .models import Asset
 from .serializers import AssetsSerializer
 from rest_framework.request import HttpRequest
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.generics import DestroyAPIView,UpdateAPIView
+from rest_framework.generics import DestroyAPIView,UpdateAPIView, ListAPIView
 from rest_framework.mixins import ListModelMixin,CreateModelMixin
+from rest_framework.response import Response
 import uuid
 
 
@@ -44,4 +45,4 @@ class AssetFilterView(GenericViewSet,ListModelMixin):
         if state:
             queryset = queryset.filter(state=state)
         return queryset
-    
+
