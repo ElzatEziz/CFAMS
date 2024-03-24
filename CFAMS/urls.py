@@ -26,6 +26,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from inventory.views import InventoryRecordView,InventoryRecordCreateView,InventoryRecordDeleteByIdView,InventoryRecordUpdateByIdView
 router = routers.DefaultRouter()
 router.register('assets',AssetView)
 router.register('users',UserView)
@@ -37,6 +38,8 @@ router.register('reports',ReportView)
 router.register('reports_create',ReportCreateView,basename='reports_create')
 router.register('disposals',DisposalRecordView)
 router.register('disposals_create',DisposalRecordCreateView,basename='disposals_create')
+router.register('inventory',InventoryRecordView)
+router.register('inventory_create',InventoryRecordCreateView,basename='inventory_create')
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
@@ -48,6 +51,8 @@ urlpatterns = [
     path('reports_update/<int:id>/', ReportUpdateByIdView.as_view(), name='update-report'),
     path('disposals_delete/<int:id>/', DisposalRecordDeleteByIdView.as_view(), name='delete-disposal'),
     path('disposals_update/<int:id>/', DisposalRecordUpdateByIdView.as_view(), name='update-disposal'),
+    path('inventory_delete/<int:id>/', InventoryRecordDeleteByIdView.as_view(), name='delete-inventory'),
+    path('inventory_update/<int:id>/', InventoryRecordUpdateByIdView.as_view(), name='update-inventory'),
 ]
 
 urlpatterns += router.urls
